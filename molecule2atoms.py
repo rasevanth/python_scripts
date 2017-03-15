@@ -7,6 +7,7 @@ This is a temporary script file.
 def parse_molecule (formula):
     
     import re
+    #gets the molecules inside the brackets and their bracket valency and also the molecules outside the bracket
     def brckttext_val(txt,brkts):
         start,end=brkts[0],brkts[1]
         txt_outbrkt=txt
@@ -14,8 +15,6 @@ def parse_molecule (formula):
         if start in txt:
             pattern=r"(\{}.+?\{})[0-9]*".format(start,end)
             t=re.findall(pattern,txt)
-        
-        
             for each in t:
                 start_index=txt_outbrkt.find(each)
                 end_index=txt_outbrkt.find(each)+len(each)
@@ -30,6 +29,7 @@ def parse_molecule (formula):
         else:
             li.append(("",0))
         return txt_outbrkt,li
+    #converts invidual molecules to atoms 
     def vals(mols):
         pattern=r"[A-Z][a-z]?[0-9]*"
         mol=re.findall(pattern,mols)
@@ -47,6 +47,7 @@ def parse_molecule (formula):
         for each in vals(mols):
             s.append(atom(each))
         return s
+    #adds the valency outside the brackets
     def add_outval(lis,outval):
         d=[]
         for each in lis:
@@ -58,7 +59,7 @@ def parse_molecule (formula):
         for each in b[1]:
             temp.extend(add_outval(mols2atoms(each[0]),each[1]))
         return temp
-
+    #loop for the complex molecules to change into simpler molecules
     def outinbrackets(molecule,degree=3,li=[]):
         brkt={3:"{}",2:"[]",1:"()"}
         if degree==1:
@@ -73,7 +74,7 @@ def parse_molecule (formula):
             degree=0
     
         return li  
-    
+    #changing molecule counter to dictionary
     def list_to_dict(temp):    
         final={}
         for (k,v) in temp:
